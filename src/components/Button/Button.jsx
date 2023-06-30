@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 const Button = ({onClick}) => {
   return (
@@ -10,8 +10,8 @@ const Button = ({onClick}) => {
 }
 
 
-Button.propTypes = {
+// Button.propTypes = {
 
-}
+// }
 
 export default Button

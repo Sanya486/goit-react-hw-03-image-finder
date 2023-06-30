@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 const Placeholder = props => {
   return (
@@ -8,8 +8,8 @@ const Placeholder = props => {
   )
 }
 
-Placeholder.propTypes = {
+// Placeholder.propTypes = {
 
-}
+// }
 
 export default Placeholder

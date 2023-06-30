@@ -1,12 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 const Loader = props => {
   return ;
 }
 
-Loader.propTypes = {
+// Loader.propTypes = {
 
-}
+// }
 
 export default Loader
