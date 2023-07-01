@@ -1,14 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 import css from './ImageGallery.module.css'
 
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 
-const ImageGallery = ({searchResults, onImageClick}) => {
+
+const ImageGallery = ({ searchResults, onImageClick }) => {
   return (
     <ul className={css.ImageGallery}>
-      {searchResults.map(result => (
+      {searchResults.map((result, index) => (
         <ImageGalleryItem
+          key={index}
           src={result.webformatURL}
           alt={result.tags}
           largeImageURL ={result.largeImageURL}
@@ -20,7 +23,7 @@ const ImageGallery = ({searchResults, onImageClick}) => {
 }
 
 ImageGallery.propTypes = {
-  searchResults: PropTypes.func.isRequired,
+  searchResults: PropTypes.array.isRequired,
   onImageClick: PropTypes.func.isRequired,
 };
 

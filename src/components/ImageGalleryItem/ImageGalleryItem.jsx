@@ -1,11 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 import css from './ImafeGalleryItem.module.css'
 
-const ImageGalleryItem = ({ src, alt, largeImageURL, onImageClick}) => {
+const ImageGalleryItem = ({ src, alt, largeImageURL, onImageClick }) => {
   return (
-    <li key={alt} className={css.ImageGalleryItem} onClick={() => onImageClick(largeImageURL, alt)}>
-          <img src={src} alt={alt} className={css.ImageGalleryItemImage} />
+    <li
+      className={css.ImageGalleryItem}
+      onClick={() => onImageClick(largeImageURL, alt)}
+    >
+      <img src={src} alt={alt} className={css.ImageGalleryItemImage} />
     </li>
   );
 }

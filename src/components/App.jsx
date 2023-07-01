@@ -91,8 +91,14 @@ export default class App extends Component {
         };
       });
 
-      if (this.state.page === 42) {
+      if (response.hits.length === 0) {
         this.setState({ isLoadMoreEnable: false });
+        Notify.info('That`s all we have for your request 🙂', {
+          position: 'center-bottom',
+          clickToClose: true,
+          fontSize: '20px',
+          width: '600px'
+        });
       }
     } catch (error) {
       console.log(error.message);
