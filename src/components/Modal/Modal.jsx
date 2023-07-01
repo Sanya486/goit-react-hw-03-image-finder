@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { createPortal } from 'react-dom';
+import css from './Modal.module.css'
 
 const modalRoot = document.querySelector('#modal-root')
 
 export default class Modal extends Component {
-  // static propTypes = {
-  //   prop: PropTypes
-  // }
+  static propTypes = {
+    src: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+    onCloseModal: PropTypes.func.isRequired,
+    isModalShow: PropTypes.bool.isRequired,
+  };
+  
   componentDidMount() {
     this.closeOnEscape();
   }
@@ -16,36 +21,33 @@ export default class Modal extends Component {
     window.removeEventListener('keydown', this.onKeydown);
   }
 
-  onKeydown = (e) => {
+  onKeydown = e => {
     if (e.code === 'Escape') {
       this.props.onCloseModal();
     }
-  }
+  };
 
-    closeOnEscape = () => {
-      if (this.props.isModalShow) {
-        window.addEventListener('keydown', this.onKeydown);
-      }
-    };
-
-    closeOnBackdrop = (e) => {
-      if (e.target === e.currentTarget) {
-        this.props.onCloseModal()
-      }
+  closeOnEscape = () => {
+    if (this.props.isModalShow) {
+      window.addEventListener('keydown', this.onKeydown);
     }
+  };
 
-    render() {
-      return createPortal(
-        <div
-          className="Overlay"
-          onClick={this.closeOnBackdrop}
-        >
-          <div className="Modal">
-            <img src={this.props.src} alt={this.props.alt} />
-          </div>
-        </div>,
-        modalRoot
-      );
+  closeOnBackdrop = e => {
+    if (e.target === e.currentTarget) {
+      this.props.onCloseModal();
     }
+  };
+
+  render() {
+    return createPortal(
+      <div className={css.Overlay} onClick={this.closeOnBackdrop}>
+        <div className={css.Modal}>
+          <img src={this.props.src} alt={this.props.alt} />
+        </div>
+      </div>,
+      modalRoot
+    );
   }
+}
 

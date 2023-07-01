@@ -1,12 +1,9 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import { Blocks } from 'react-loader-spinner';
+import css from './Loader.module.css'
 
-const Loader = props => {
-  return ;
+const Loader = () => {
+  return <Blocks color="blue" wrapperClass={css.Loader} />;
 }
-
-// Loader.propTypes = {
-
-// }
 
 export default Loader

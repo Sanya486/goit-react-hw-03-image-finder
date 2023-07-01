@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
-import { Blocks } from 'react-loader-spinner';
+
+import { Notify } from 'notiflix';
+import Loader from './Loader/Loader';
+import { animateScroll as scroll } from 'react-scroll';
+
+import css from './App.module.css'
 
 import { fetchImages } from 'api/api';
 
@@ -15,9 +19,7 @@ const html = document.querySelector('html')
 
 
 export default class App extends Component {
-  // static propTypes = {
-  //   prop: PropTypes
-  // }
+
 
 
   state = {
@@ -27,25 +29,45 @@ export default class App extends Component {
     isModalShow: false,
     isLoaderShow: false,
   };
+  
+  scrollToBottom = () => {
+    scroll.scrollMore(window.outerHeight - 290, {
+     smooth: true,
+     delay: 100,
+   });
 
+  }
+
+  
+  
   onSubmit = async e => {
     try {
       const query = e.target.elements.search.value;
 
-      await this.setState({ page: 1, isLoaderShow: true, searchResults: null });
+      if (query !== '') {
+        await this.setState({
+          page: 1,
+          isLoaderShow: true,
+          searchResults: null,
+        });
 
-      const response = await fetchImages(query, this.state.page);
+        const response = await fetchImages(query, this.state.page);
 
-      this.setState({
-        searchResults: response.hits,
-        query,
-        isLoadMoreEnable: true,
-        largeImage: {
-          src: '',
-          alt: '',
-        },
-        isLoaderShow: false,
-      });
+        this.setState({
+          searchResults: response.hits,
+          query,
+          isLoadMoreEnable: true,
+          largeImage: {
+            src: '',
+            alt: '',
+          },
+          isLoaderShow: false,
+        });
+      }
+      else {
+        Notify.info("Please write what you whant to find")
+        return
+      }
     } catch (error) {
       console.log(error.message)
     }
@@ -96,12 +118,12 @@ export default class App extends Component {
   render() {
     const { searchResults, isLoadMoreEnable, isModalShow, largeImage } =
       this.state;
-    const {onSubmit, onImageClick, onLoadMore, onCloseModal} = this
+    const {onSubmit, onImageClick, onLoadMore, onCloseModal, scrollToBottom} = this
 
     return (
-      <div className="App">
+      <div className={css.App}>
         <Searchbar onSubmit={onSubmit} />
-        <Placeholder/>
+        <Placeholder />
         {searchResults && (
           <ImageGallery
             searchResults={searchResults}
@@ -109,9 +131,11 @@ export default class App extends Component {
           />
         )}
         {this.state.isLoaderShow && (
-          <Blocks color="blue" wrapperClass="Loader" />
+          <Loader/>
         )}
-        {searchResults && isLoadMoreEnable && <Button onClick={onLoadMore} />}
+        {searchResults && isLoadMoreEnable && (
+          <Button onClick={onLoadMore} scrollToBottom={scrollToBottom} />
+        )}
         {isModalShow && (
           <Modal
             src={largeImage.src}

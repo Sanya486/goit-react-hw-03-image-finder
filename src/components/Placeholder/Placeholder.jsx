@@ -1,15 +1,11 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import css from './Placeholder.module.css'
 
-const Placeholder = props => {
+const Placeholder = () => {
   return (
-    <div className='placeholder'>
+    <div className={css.placeholder}>
     </div>
   )
 }
-
-// Placeholder.propTypes = {
-
-// }
 
 export default Placeholder
