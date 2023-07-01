@@ -52,6 +52,22 @@ export default class App extends Component {
         });
 
         const response = await fetchImages(query, this.state.page);
+        if (response.hits.length === 0) {
+          this.setState({ isLoadMoreEnable: false });
+          Notify.warning(
+            'We can`t find anything for you 😔 Try to write something else 🧐',
+            {
+              position: 'center-center',
+              clickToClose: true,
+              fontSize: '20px',
+              width: '700px',
+            }
+          );
+           this.setState({
+             isLoaderShow: false,
+           });
+          return
+        }
 
         this.setState({
           searchResults: response.hits,
