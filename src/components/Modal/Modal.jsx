@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
-import css from './Modal.module.css'
+import css from './Modal.module.css';
 
-const modalRoot = document.querySelector('#modal-root')
+const modalRoot = document.querySelector('#modal-root');
 
 export default class Modal extends Component {
   static propTypes = {
@@ -12,7 +12,7 @@ export default class Modal extends Component {
     onCloseModal: PropTypes.func.isRequired,
     isModalShow: PropTypes.bool.isRequired,
   };
-  
+
   componentDidMount() {
     this.closeOnEscape();
   }
@@ -28,9 +28,7 @@ export default class Modal extends Component {
   };
 
   closeOnEscape = () => {
-    if (this.props.isModalShow) {
-      window.addEventListener('keydown', this.onKeydown);
-    }
+    window.addEventListener('keydown', this.onKeydown);
   };
 
   closeOnBackdrop = e => {
@@ -50,4 +48,3 @@ export default class Modal extends Component {
     );
   }
 }
-

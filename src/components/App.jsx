@@ -23,6 +23,7 @@ export default class App extends Component {
 
 
   state = {
+    query:'',
     page: 1,
     searchResults: null,
     isLoadMoreEnable: false,
@@ -38,87 +39,43 @@ export default class App extends Component {
 
   }
 
-  
-  
-  onSubmit = async e => {
-    try {
-      const query = e.target.elements.search.value;
-
-      if (query !== '') {
-        await this.setState({
-          page: 1,
-          isLoaderShow: true,
-          searchResults: null,
-        });
-
-        const response = await fetchImages(query, this.state.page);
-        if (response.hits.length === 0) {
-          this.setState({ isLoadMoreEnable: false });
-          Notify.warning(
-            'We can`t find anything for you 😔 Try to write something else 🧐',
-            {
-              position: 'center-center',
-              clickToClose: true,
-              fontSize: '20px',
-              width: '700px',
-            }
-          );
-           this.setState({
-             isLoaderShow: false,
-           });
-          return
-        }
-
-        this.setState({
-          searchResults: response.hits,
-          query,
-          isLoadMoreEnable: true,
-          largeImage: {
-            src: '',
-            alt: '',
-          },
-          isLoaderShow: false,
-        });
+  async componentDidUpdate(_, prevState) {
+    if (prevState.query !== this.state.query || prevState.page !== this.state.page) {
+      this.setState({ isLoaderShow: true });
+      const response = await fetchImages(this.state.query, this.state.page)
+      if (response.hits.length === 0) {
+        Notify.warning('Oops. Sorry, but there isn`t anything for this request! Try to find something different!')
+        this.setState({ isLoadMoreEnable: false});
       }
       else {
-        Notify.info("Please write what you whant to find")
-        return
-      }
-    } catch (error) {
-      console.log(error.message)
-    }
-  };
-
-  onLoadMore = async () => {
-    try {
-      await this.setState(prevState => {
-        return {
-          page: prevState.page + 1,
-          isLoaderShow: true,
-        };
-      });
-
-      const response = await fetchImages(this.state.query, this.state.page);
-
-      this.setState(prevState => {
-        return {
-          searchResults: [...prevState.searchResults, ...response.hits],
-          isLoaderShow:false
-        };
-      });
-
-      if (response.hits.length === 0) {
-        this.setState({ isLoadMoreEnable: false });
-        Notify.info('That`s all we have for your request 🙂', {
-          position: 'center-bottom',
-          clickToClose: true,
-          fontSize: '20px',
-          width: '600px'
+        this.setState(prevState => {
+          return {
+            searchResults: [...prevState.searchResults, ...response.hits],
+            isLoadMoreEnable: true,
+          };
         });
       }
-    } catch (error) {
-      console.log(error.message);
+      this.setState({ isLoaderShow: false});
     }
+  }
+  
+  onSubmit = e => {
+    const query = e.target.elements.search.value;
+    if (this.state.query === query) {
+      return Notify.warning(`You are already watching ${query}`)
+    }
+    this.setState({
+      query: query.toLowerCase(),
+      isLoadMoreEnable: false,
+      searchResults: [],
+      page: 1,
+    })
+  };
+
+  onLoadMore = () => {
+    this.setState(prevState => ({
+     page: prevState.page + 1,
+   }))
   };
 
   onImageClick = (src, alt) => {
